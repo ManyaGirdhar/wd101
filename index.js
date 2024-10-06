@@ -1,11 +1,37 @@
-// Load data from local storage and populate table on page load
-window.onload = function () {
-    loadTableData();
-};
+// Calculate age from Date of Birth
+function calculateAge(dob) {
+    const birthDate = new Date(dob);
+    const diff = Date.now() - birthDate.getTime();
+    const ageDate = new Date(diff);
+    return Math.abs(ageDate.getUTCFullYear() - 1970);
+}
 
-// Form validation and submission handler
-document.getElementById('registrationForm').addEventListener('submit', function (e) {
-    e.preventDefault(); // Prevent page reload
+// Save entries to local storage
+function saveToLocalStorage(entries) {
+    localStorage.setItem('entries', JSON.stringify(entries));
+}
+
+// Load entries from local storage
+function loadFromLocalStorage() {
+    return JSON.parse(localStorage.getItem('entries')) || [];
+}
+
+// Add new row to the table
+function addEntryToTable(entry) {
+    const tableBody = document.getElementById('entriesTableBody');
+    const newRow = `<tr>
+                        <td class="border px-4 py-2">${entry.name}</td>
+                        <td class="border px-4 py-2">${entry.email}</td>
+                        <td class="border px-4 py-2">${entry.password}</td>
+                        <td class="border px-4 py-2">${entry.dob}</td>
+                        <td class="border px-4 py-2">${entry.acceptTerms}</td>
+                    </tr>`;
+    tableBody.innerHTML += newRow;
+}
+
+// Handle form submission
+document.getElementById('registrationForm').addEventListener('submit', function(event) {
+    event.preventDefault();
 
     const name = document.getElementById('name').value;
     const email = document.getElementById('email').value;
@@ -13,63 +39,35 @@ document.getElementById('registrationForm').addEventListener('submit', function 
     const dob = document.getElementById('dob').value;
     const acceptTerms = document.getElementById('acceptTerms').checked;
 
-    if (!isValidDob(dob)) {
-        alert("Age must be between 18 and 55.");
+    // Validate email format
+    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    if (!emailPattern.test(email)) {
+        alert("Please enter a valid email address.");
         return;
     }
 
-    const formData = { name, email, password, dob, acceptTerms };
+    // Validate age between 18 and 55
+    const age = calculateAge(dob);
+    if (age < 18 || age > 55) {
+        alert("You must be between 18 and 55 years old to register.");
+        return;
+    }
 
-    // Store the data in localStorage
-    saveDataToLocalStorage(formData);
+    // Save the entry to local storage
+    const newEntry = { name, email, password, dob, acceptTerms };
+    const entries = loadFromLocalStorage();
+    entries.push(newEntry);
+    saveToLocalStorage(entries);
 
-    // Refresh table data
-    loadTableData();
+    // Add entry to the table
+    addEntryToTable(newEntry);
 
-    // Reset form
+    // Clear form
     document.getElementById('registrationForm').reset();
 });
 
-// Validate Date of Birth (age must be between 18 and 55)
-function isValidDob(dob) {
-    const birthDate = new Date(dob);
-    const today = new Date();
-
-    const age = today.getFullYear() - birthDate.getFullYear();
-    const monthDiff = today.getMonth() - birthDate.getMonth();
-
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-        age--;
-    }
-
-    return age >= 18 && age <= 55;
-}
-
-// Save form data to local storage
-function saveDataToLocalStorage(formData) {
-    let data = JSON.parse(localStorage.getItem('formData')) || [];
-    data.push(formData);
-    localStorage.setItem('formData', JSON.stringify(data));
-}
-
-// Load data from local storage and populate the table
-function loadTableData() {
-    const tableBody = document.getElementById('dataTable');
-    tableBody.innerHTML = ""; // Clear existing data
-
-    const data = JSON.parse(localStorage.getItem('formData')) || [];
-
-    data.forEach(item => {
-        const row = document.createElement('tr');
-
-        row.innerHTML = `
-            <td class="border px-4 py-2">${item.name}</td>
-            <td class="border px-4 py-2">${item.email}</td>
-            <td class="border px-4 py-2">${item.password}</td>
-            <td class="border px-4 py-2">${item.dob}</td>
-            <td class="border px-4 py-2">${item.acceptTerms ? 'true' : 'false'}</td>
-        `;
-
-        tableBody.appendChild(row);
-    });
-}
+// Load entries on page load
+window.onload = function() {
+    const entries = loadFromLocalStorage();
+    entries.forEach(entry => addEntryToTable(entry));
+};
