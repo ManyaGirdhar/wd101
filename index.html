@@ -4,51 +4,72 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registration Form</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="index.js" defer></script>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 p-8">
-    <div class="max-w-md mx-auto bg-white p-8 rounded shadow-md">
-        <h2 class="text-2xl font-bold mb-6">Registration Form</h2>
+<body class="bg-gray-100">
+    <div class="max-w-md mx-auto mt-10 bg-white p-6 rounded-lg shadow-lg">
         <form id="registrationForm">
-            <label for="name" class="block font-bold">Name</label>
-            <input type="text" id="name" class="border rounded w-full py-2 px-3 mb-4" required>
-
-            <label for="email" class="block font-bold">Email</label>
-            <input type="email" id="email" class="border rounded w-full py-2 px-3 mb-4" required>
-
-            <label for="password" class="block font-bold">Password</label>
-            <input type="password" id="password" class="border rounded w-full py-2 px-3 mb-4" required>
-
-            <label for="dob" class="block font-bold">Date of Birth</label>
-            <input type="date" id="dob" class="border rounded w-full py-2 px-3 mb-4" required>
-
+            <!-- Name Field -->
             <div class="mb-4">
-                <input type="checkbox" id="acceptTerms" required>
-                <label for="acceptTerms">Accept Terms & Conditions</label>
+                <label for="name" class="block text-gray-700 font-bold mb-2">Name <span class="text-red-500">*</span></label>
+                <input type="text" id="name" name="name" placeholder="Enter name" required
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
 
-            <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded">Submit</button>
+            <!-- Email Field -->
+            <div class="mb-4">
+                <label for="email" class="block text-gray-700 font-bold mb-2">Email <span class="text-red-500">*</span></label>
+                <input type="email" id="email" name="email" placeholder="Enter email" required
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <!-- Password Field -->
+            <div class="mb-4">
+                <label for="password" class="block text-gray-700 font-bold mb-2">Password <span class="text-red-500">*</span></label>
+                <input type="password" id="password" name="password" placeholder="Enter password" required
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <!-- Date of Birth Field -->
+            <div class="mb-4">
+                <label for="dob" class="block text-gray-700 font-bold mb-2">Date of Birth <span class="text-red-500">*</span></label>
+                <input type="date" id="dob" name="dob" required
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <!-- Accept Terms Checkbox -->
+            <div class="flex items-center mb-4">
+                <input type="checkbox" id="acceptTerms" name="acceptTerms" required
+                    class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                <label for="acceptTerms" class="ml-2 block text-gray-700">Accept Terms & Conditions</label>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+                Submit
+            </button>
         </form>
     </div>
 
-    <div class="max-w-lg mx-auto mt-8">
-        <h3 class="text-xl font-bold mb-4">Entries</h3>
-        <table class="min-w-full bg-white">
+    <!-- Table to Display Saved Data -->
+    <div class="max-w-md mx-auto mt-10 bg-white p-6 rounded-lg shadow-lg">
+        <h2 class="text-lg font-bold mb-4">Entries</h2>
+        <table class="min-w-full table-auto border-collapse border border-gray-300">
             <thead>
-                <tr>
-                    <th class="py-2 px-4 border-b">Name</th>
-                    <th class="py-2 px-4 border-b">Email</th>
-                    <th class="py-2 px-4 border-b">Password</th>
-                    <th class="py-2 px-4 border-b">Dob</th>
-                    <th class="py-2 px-4 border-b">Accepted terms?</th>
-                </tr>
+              <tr>
+                <th class="border px-4 py-2">Name</th>
+                <th class="border px-4 py-2">Email</th>
+                <th class="border px-4 py-2">Password</th>
+                <th class="border px-4 py-2">Dob</th>
+                <th class="border px-4 py-2">Accepted terms?</th>
+              </tr>
             </thead>
-            <tbody id="entriesTableBody">
-                <!-- Rows will be dynamically added here -->
-            </tbody>
-        </table>
-    </div>
 
-    <script src="index.js"></script>
+                <tbody id="dataTable"></tbody> <!-- Empty table body -->
+
+          </table>
+          
+    </div>
 </body>
 </html>
